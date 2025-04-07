@@ -6,6 +6,8 @@
 #include <thread>
 #include <stdexcept>
 #include <cstring>
+#include <ostream>
+#include <iostream>
 
 Server::Server(int port) : port_(port), server_fd_(-1), running_(false) {}
 

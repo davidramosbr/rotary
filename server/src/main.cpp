@@ -1,14 +1,13 @@
 #include "server.hpp"
 #include <iostream>
 
-uint SERVER_PORT = 8080;
+uint SERVER_PORT = 13214;
 
 int main()
 {
     try
     {
         Server server(SERVER_PORT);
-        std::cout << "Iniciando servidor de chat na porta " << SERVER_PORT << "..." << std::endl;
         server.start();
     }
     catch (const std::exception &e)

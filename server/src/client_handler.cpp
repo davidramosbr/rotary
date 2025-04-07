@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 void ClientHandler::handle_client(int client_fd,
                                   std::vector<ClientInfo> &clients,

@@ -1,35 +1,47 @@
+# Configurações do compilador
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -Iinclude/
 LDFLAGS := -pthread
-DEPFLAGS = -MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
+DEPFLAGS = -MMD -MP -MF $(BUILD_DIR)/$*.d  # Flags para geração de dependências
+
+# Diretórios
 SRC_DIR := src
 BUILD_DIR := build
 BIN_DIR := bin
+
+# Arquivos fonte
 SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
-DEPS := $(OBJECTS:.o=.d)
 TARGET := $(BIN_DIR)/server
 
+# Regra padrão
 all: $(TARGET)
 
+# Regra de ligação
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) $^ -o $@
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(BUILD_DIR)/%.d | $(BUILD_DIR)
+# Regra de compilação com tratamento para primeira execução
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) $(DEPFLAGS) -c $< -o $@
 
--include $(DEPS)
-
+# Criação do diretório build
 $(BUILD_DIR):
 	@mkdir -p $@
 
+# Inclui os arquivos de dependência (ignora erro se não existirem)
+-include $(wildcard $(BUILD_DIR)/*.d)
+
+# Limpeza (agora remove arquivos .d também)
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
 
+# Recompilar tudo
 rebuild: clean all
 
+# Executar o servidor
 run: $(TARGET)
 	./$(TARGET)
 

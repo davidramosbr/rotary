@@ -4,6 +4,8 @@
 #include <vector>
 #include <mutex>
 
+std::string generate_client_id();
+
 struct ClientInfo
 {
     int fd;
